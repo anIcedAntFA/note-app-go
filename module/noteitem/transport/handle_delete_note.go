@@ -18,20 +18,23 @@ func HandleDeleteNote(appCtx appctx.AppContext) gin.HandlerFunc {
 		id, err := strconv.Atoi(ctx.Param("id"))
 
 		if err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{
-				"error": err.Error(),
-			})
-			return
+			panic(common.ErrorInvalidRequest(err))
+			// ctx.JSON(http.StatusBadRequest, gin.H{
+			// 	"error": err.Error(),
+			// })
+
+			// return
 		}
 
 		storage := notestorage.NewMySQLStorage(db)
 		business := notebusiness.NewDeleteNoteItemBusiness(storage)
 
 		if err := business.DeleteNote(ctx.Request.Context(), map[string]interface{}{"id": id}); err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{
-				"error": err.Error(),
-			})
-			return
+			panic(err)
+			// ctx.JSON(http.StatusBadRequest, gin.H{
+			// 	"error": err.Error(),
+			// })
+			// return
 		}
 
 		ctx.JSON(http.StatusOK, common.SimpleSuccessResponse(true))

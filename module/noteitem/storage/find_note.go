@@ -2,7 +2,7 @@ package notestorage
 
 import (
 	"context"
-	"errors"
+	"note_server/common"
 	notemodel "note_server/module/noteitem/model"
 
 	"gorm.io/gorm"
@@ -16,9 +16,10 @@ func (s *mysqlStorage) FindNote(
 
 	if err := s.db.Where(condition).First(&data).Error; err != nil {
 		if err == gorm.ErrRecordNotFound { // data not found
-			return nil, errors.New("Note item not found")
+			return nil, common.ErrorRecordNotFound
 		}
-		return nil, err
+
+		return nil, common.ErrorDB(err)
 	}
 
 	return &data, nil

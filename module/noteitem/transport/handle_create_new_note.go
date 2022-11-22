@@ -18,9 +18,8 @@ func HandleCreateNewNote(appCtx appctx.AppContext) gin.HandlerFunc {
 		var data notemodel.NoteItemCreate
 
 		if err := ctx.ShouldBind(&data); err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{
-				"error": err.Error(),
-			})
+			// panic(err)
+			ctx.JSON(http.StatusBadRequest, common.ErrorInvalidRequest(err))
 
 			return
 		}
@@ -30,9 +29,8 @@ func HandleCreateNewNote(appCtx appctx.AppContext) gin.HandlerFunc {
 		business := notebusiness.NewCreateNoteItemBusiness(storage)
 
 		if err := business.CreateNewNote(ctx.Request.Context(), &data); err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{
-				"error": err.Error(),
-			})
+			// panic(err)
+			ctx.JSON(http.StatusBadRequest, err)
 
 			return
 		}

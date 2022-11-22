@@ -2,6 +2,7 @@ package notestorage
 
 import (
 	"context"
+	"note_server/common"
 	notemodel "note_server/module/noteitem/model"
 )
 
@@ -12,7 +13,7 @@ func (s *mysqlStorage) DeleteNote(
 	if err := s.db.Table(notemodel.NoteItem{}.TableName()).
 		Where(condition).
 		Updates(map[string]interface{}{"status": "deleted"}).Error; err != nil {
-		return err
+		return common.ErrorDB(err)
 	}
 
 	return nil

@@ -2,7 +2,7 @@ package notebusiness
 
 import (
 	"context"
-	"errors"
+	"note_server/common"
 	notemodel "note_server/module/noteitem/model"
 )
 
@@ -33,15 +33,15 @@ func (biz *deleteBusiness) DeleteNote(
 	oldData, err := biz.store.FindNote(ctx, condition)
 
 	if err != nil {
-		return err
+		return common.ErrorEntityNotFound(notemodel.EntityName, err)
 	}
 
 	if oldData.Status == "Deleted" {
-		return errors.New("data has been deleted")
+		return common.ErrorEntityDeleted(notemodel.EntityName, nil)
 	}
 
 	if err := biz.store.DeleteNote(ctx, condition); err != nil {
-		return err
+		return common.ErrorCannotDeleteEntity(notemodel.EntityName, nil)
 	}
 
 	return nil

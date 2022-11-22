@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	appctx "note_server/components/appctx"
+	"note_server/middleware"
 	notetransport "note_server/module/noteitem/transport"
 	"os"
 
@@ -32,6 +33,8 @@ func main() {
 	appContext := appctx.NewAppContext(db)
 
 	router := gin.Default()
+
+	router.Use(middleware.Recover(appContext))
 
 	v1 := router.Group("/v1")
 	notes := v1.Group("/notes")

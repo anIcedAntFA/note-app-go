@@ -27,7 +27,7 @@ func (s *mysqlStorage) ListNotes(
 	}
 
 	if err := db.Count(&paging.Total).Error; err != nil {
-		return nil, err
+		return nil, common.ErrorDB(err)
 	}
 
 	offset := (paging.Page - 1) * paging.Limit
@@ -37,7 +37,7 @@ func (s *mysqlStorage) ListNotes(
 		Limit(paging.Limit).
 		Order("id desc").
 		Find(&result).Error; err != nil {
-		return nil, err
+		return nil, common.ErrorDB(err)
 	}
 
 	return result, nil
